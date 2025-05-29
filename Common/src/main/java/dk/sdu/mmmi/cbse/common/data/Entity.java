@@ -1,21 +1,93 @@
 package dk.sdu.mmmi.cbse.common.data;
 
+import java.util.UUID;
+
 public class Entity {
-    private float x, y, dx, dy;
-    private float radius;
 
-    public float getX() { return x; }
-    public void setX(float x) { this.x = x; }
+    private final UUID id = UUID.randomUUID();
 
-    public float getY() { return y; }
-    public void setY(float y) { this.y = y; }
+    private double x, y;
+    private double dx, dy;
+    private double radians;
+    private double rotation;
+    private double radius;
 
-    public float getDx() { return dx; }
-    public void setDx(float dx) { this.dx = dx; }
+    private double[] shapeX;
+    private double[] shapeY;
 
-    public float getDy() { return dy; }
-    public void setDy(float dy) { this.dy = dy; }
+    public UUID getID() {
+        return id;
+    }
 
-    public float getRadius() { return radius; }
-    public void setRadius(float radius) { this.radius = radius; }
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getDx() {
+        return dx;
+    }
+
+    public void setDx(double dx) {
+        this.dx = dx;
+    }
+
+    public double getDy() {
+        return dy;
+    }
+
+    public void setDy(double dy) {
+        this.dy = dy;
+    }
+
+    public double getRadians() {
+        return radians;
+    }
+
+    public void setRadians(double radians) {
+        this.radians = radians;
+    }
+
+    public double getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    public double[] getShapeX() {
+        return shapeX;
+    }
+
+    public void setShapeX(double[] shapeX) {
+        this.shapeX = shapeX;
+    }
+
+    public double[] getShapeY() {
+        return shapeY;
+    }
+
+    public void setShapeY(double[] shapeY) {
+        this.shapeY = shapeY;
+    }
 }
