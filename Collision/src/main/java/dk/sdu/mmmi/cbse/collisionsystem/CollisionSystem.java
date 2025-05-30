@@ -6,22 +6,48 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.mmmi.cbse.enemybulletsystem.EnemyBullet;
 
 public class CollisionSystem implements IPostEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
+        // Bullet vs Asteroid
         for (Entity bullet : world.getEntities(Bullet.class)) {
             for (Entity asteroid : world.getEntities(Asteroid.class)) {
                 if (collides(bullet, asteroid)) {
                     world.removeEntity(bullet);
                     world.removeEntity(asteroid);
-
-                    // Add score when asteroid is destroyed
                     gameData.addScore(100);
-
                     return;
                 }
+            }
+        }
+
+        // Bullet vs Enemy
+        for (Entity bullet : world.getEntities(Bullet.class)) {
+            for (Entity entity : world.getEntities()) {
+                if (entity.getClass().getSimpleName().equals("Enemy") && collides(bullet, entity)) {
+                    world.removeEntity(bullet);
+                    world.removeEntity(entity);
+                    gameData.addScore(200);
+                    return;
+                }
+            }
+        }
+
+        // EnemyBullet vs Player
+        Entity player = world.getEntities().stream()
+                .filter(e -> e.getClass().getSimpleName().equals("Player"))
+                .findFirst().orElse(null);
+
+        for (Entity bullet : world.getEntities(EnemyBullet.class)) {
+            if (player != null && collides(player, bullet)) {
+                System.out.println("💀 GAME OVER 💀");
+                gameData.setGameOver(true);
+                world.removeEntity(player);
+                world.removeEntity(bullet);
+                break;
             }
         }
     }

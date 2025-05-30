@@ -7,16 +7,22 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
 public class EnemyControlSystem implements IEntityProcessingService {
 
+    private double timeSinceLastShot = 0;
+    private static final double SHOOT_INTERVAL = 1.5; // Seconds
+
     @Override
     public void process(GameData gameData, World world) {
-        Entity player = findPlayer(world);
+        Entity player = world.getEntities().stream()
+                .filter(e -> e.getClass().getSimpleName().equals("Player"))
+                .findFirst().orElse(null);
 
         for (Entity enemy : world.getEntities(Enemy.class)) {
+            double speed = 40;
             if (player != null) {
-                steerTowardPlayer(enemy, player, gameData);
+                double angle = Math.atan2(player.getY() - enemy.getY(), player.getX() - enemy.getX());
+                enemy.setRadians(angle);
             }
 
-            double speed = 40;
             double dx = Math.cos(enemy.getRadians()) * speed * gameData.getDelta();
             double dy = Math.sin(enemy.getRadians()) * speed * gameData.getDelta();
 
@@ -25,23 +31,25 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
             wrap(enemy, gameData);
             updateShape(enemy);
-        }
-    }
 
-    private Entity findPlayer(World world) {
-        for (Entity e : world.getEntities()) {
-            if (e.getClass().getSimpleName().toLowerCase().contains("player")) {
-                return e;
+            // SHOOT
+            timeSinceLastShot += gameData.getDelta();
+            if (timeSinceLastShot >= SHOOT_INTERVAL) {
+                world.addEntity(createEnemyBullet(enemy));
+                timeSinceLastShot = 0;
             }
         }
-        return null;
     }
 
-    private void steerTowardPlayer(Entity enemy, Entity player, GameData gameData) {
-        double dx = player.getX() - enemy.getX();
-        double dy = player.getY() - enemy.getY();
-        double angleToPlayer = Math.atan2(dy, dx);
-        enemy.setRadians(angleToPlayer);
+    private Entity createEnemyBullet(Entity enemy) {
+        Entity bullet = new EnemyBullet();
+        bullet.setX(enemy.getX());
+        bullet.setY(enemy.getY());
+        bullet.setRadians(enemy.getRadians());
+        bullet.setRadius(2);
+        bullet.setDx(Math.cos(enemy.getRadians()) * 150);
+        bullet.setDy(Math.sin(enemy.getRadians()) * 150);
+        return bullet;
     }
 
     private void wrap(Entity entity, GameData gameData) {
@@ -62,13 +70,10 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
         shapeX[0] = x + Math.cos(radians) * r;
         shapeY[0] = y + Math.sin(radians) * r;
-
         shapeX[1] = x + Math.cos(radians - 4 * Math.PI / 5) * r;
         shapeY[1] = y + Math.sin(radians - 4 * Math.PI / 5) * r;
-
         shapeX[2] = x + Math.cos(radians + Math.PI) * (r / 2);
         shapeY[2] = y + Math.sin(radians + Math.PI) * (r / 2);
-
         shapeX[3] = x + Math.cos(radians + 4 * Math.PI / 5) * r;
         shapeY[3] = y + Math.sin(radians + 4 * Math.PI / 5) * r;
 

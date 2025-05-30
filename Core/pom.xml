@@ -19,6 +19,49 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>Common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>Player</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>Bullet</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>Asteroids</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>Collision</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>Enemy</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>EnemyBullet</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -31,43 +74,5 @@
             </plugin>
         </plugins>
     </build>
-
-<dependencies>
-    <dependency>
-        <groupId>dk.sdu.mmmi.cbse</groupId>
-        <artifactId>Common</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-        <groupId>dk.sdu.mmmi.cbse</groupId>
-        <artifactId>Player</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-        <groupId>dk.sdu.mmmi.cbse</groupId>
-        <artifactId>Bullet</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-        <groupId>dk.sdu.mmmi.cbse</groupId>
-        <artifactId>Asteroids</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-        <groupId>dk.sdu.mmmi.cbse</groupId>
-        <artifactId>Collision</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-controls</artifactId>
-        <version>${javafx.version}</version>
-    </dependency>
-        <dependency>
-    <groupId>dk.sdu.mmmi.cbse</groupId>
-    <artifactId>Enemy</artifactId>
-    <version>1.0-SNAPSHOT</version>
-        </dependency>
-</dependencies>
 
 </project>

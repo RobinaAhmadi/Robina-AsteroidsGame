@@ -16,5 +16,6 @@
         <module>Bullet</module>
         <module>Asteroids</module>
         <module>Collision</module>
+        <module>EnemyBullet</module>
     </modules>
 </project>

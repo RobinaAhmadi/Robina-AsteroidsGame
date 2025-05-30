@@ -9,6 +9,7 @@ public class GameData {
     private double delta;
     private final Set<String> keys = new HashSet<>();
     private int score = 0;
+    private boolean gameOver = false; // Game over flag
 
     // Screen dimensions
     public int getDisplayWidth() {
@@ -60,5 +61,14 @@ public class GameData {
 
     public boolean isDown(String key) {
         return keys.contains(key);
+    }
+
+    // Game over logic
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }
