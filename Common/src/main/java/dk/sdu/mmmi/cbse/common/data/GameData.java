@@ -8,7 +8,9 @@ public class GameData {
     private int displayHeight;
     private double delta;
     private final Set<String> keys = new HashSet<>();
+    private int score = 0;
 
+    // Screen dimensions
     public int getDisplayWidth() {
         return displayWidth;
     }
@@ -25,6 +27,7 @@ public class GameData {
         this.displayHeight = displayHeight;
     }
 
+    // Time delta between frames
     public double getDelta() {
         return delta;
     }
@@ -33,7 +36,20 @@ public class GameData {
         this.delta = delta;
     }
 
-    // 🔥 These are required for keyboard handling!
+    // Score system
+    public int getScore() {
+        return score;
+    }
+
+    public void addScore(int points) {
+        score += points;
+    }
+
+    public void resetScore() {
+        score = 0;
+    }
+
+    // Input handling
     public void addKey(String key) {
         keys.add(key);
     }
@@ -44,10 +60,5 @@ public class GameData {
 
     public boolean isDown(String key) {
         return keys.contains(key);
-    }
-
-    public boolean isKeyPressed(String space) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isKeyPressed'");
     }
 }

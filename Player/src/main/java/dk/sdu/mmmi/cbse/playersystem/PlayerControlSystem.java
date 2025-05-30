@@ -13,7 +13,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
     public void process(GameData gameData, World world) {
         for (Entity player : world.getEntities(Player.class)) {
             double rotationSpeed = 3;
-            double acceleration = 200;
+            double acceleration = 950; // Increased from 200 to 400
             double deceleration = 10;
 
             double x = player.getX();
@@ -47,27 +47,18 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 world.addEntity(bullet);
             }
 
-            // Apply movement
+            // Movement
             x += dx * gameData.getDelta();
             y += dy * gameData.getDelta();
 
-            // Bounce off screen edges
-            int screenWidth = gameData.getDisplayWidth();
-            int screenHeight = gameData.getDisplayHeight();
-
-            if (x < 0 || x > screenWidth) {
-                dx *= -1;
-                x = Math.max(0, Math.min(x, screenWidth));
-            }
-
-            if (y < 0 || y > screenHeight) {
-                dy *= -1;
-                y = Math.max(0, Math.min(y, screenHeight));
-            }
-
-            // Apply friction
             dx *= 1 - deceleration * gameData.getDelta();
             dy *= 1 - deceleration * gameData.getDelta();
+
+            // Bounce logic
+            if (x < 0) x = 0;
+            if (x > gameData.getDisplayWidth()) x = gameData.getDisplayWidth();
+            if (y < 0) y = 0;
+            if (y > gameData.getDisplayHeight()) y = gameData.getDisplayHeight();
 
             player.setX(x);
             player.setY(y);

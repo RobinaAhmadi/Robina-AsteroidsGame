@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class AsteroidsGame extends Application {
         Canvas canvas = new Canvas(800, 600);
         gameData.setDisplayWidth((int) canvas.getWidth());
         gameData.setDisplayHeight((int) canvas.getHeight());
+        gameData.resetScore(); // Reset score when game starts
 
         Group root = new Group();
         root.getChildren().add(canvas);
@@ -80,17 +82,14 @@ public class AsteroidsGame extends Application {
 
                 gameData.setDelta(delta);
 
-                // 💡 FIXED: Process entity logic
                 for (IEntityProcessingService processor : entityProcessorList) {
                     processor.process(gameData, world);
                 }
 
-                // 💡 Handle post-processing (e.g., collision detection)
                 for (IPostEntityProcessingService postProcessor : postEntityProcessors) {
                     postProcessor.process(gameData, world);
                 }
 
-                // Render
                 render(gc);
             }
         };
@@ -109,5 +108,10 @@ public class AsteroidsGame extends Application {
                 gc.strokePolygon(shapex, shapey, shapex.length);
             }
         }
+
+        // Draw score
+        gc.setFill(Color.WHITE);
+        gc.setFont(new Font("Consolas", 20));
+        gc.fillText("Score: " + gameData.getScore(), 10, 25);
     }
 }

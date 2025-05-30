@@ -16,6 +16,10 @@ public class CollisionSystem implements IPostEntityProcessingService {
                 if (collides(bullet, asteroid)) {
                     world.removeEntity(bullet);
                     world.removeEntity(asteroid);
+
+                    // Add score when asteroid is destroyed
+                    gameData.addScore(100);
+
                     return;
                 }
             }
