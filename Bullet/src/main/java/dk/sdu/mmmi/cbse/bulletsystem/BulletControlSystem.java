@@ -23,9 +23,10 @@ public class BulletControlSystem implements IEntityProcessingService {
 
             // Handle lifetime
             Bullet bullet = (Bullet) entity;
-            bullet.setLifeTime((float)(bullet.getLifeTime() - gameData.getDelta()));
+            bullet.setLifeTime((float) (bullet.getLifeTime() - gameData.getDelta()));
             if (bullet.getLifeTime() <= 0) {
                 world.removeEntity(bullet);
+                continue;
             }
 
             updateShape(entity);
@@ -33,35 +34,26 @@ public class BulletControlSystem implements IEntityProcessingService {
     }
 
     private void updateShape(Entity entity) {
-        float[] shapex = new float[4];
-        float[] shapey = new float[4];
+        double x = entity.getX();
+        double y = entity.getY();
+        double radius = 2.0;
 
-        float x = (float) entity.getX();
-        float y = (float) entity.getY();
-        double size = 4;
+        double[] shapeX = new double[4];
+        double[] shapeY = new double[4];
 
-        shapex[0] = x - 1;
-        shapey[0] = y - 1;
+        shapeX[0] = x - radius;
+        shapeY[0] = y - radius;
 
-        shapex[1] = x + 1;
-        shapey[1] = y - 1;
+        shapeX[1] = x + radius;
+        shapeY[1] = y - radius;
 
-        shapex[2] = x + 1;
-        shapey[2] = y + 1;
+        shapeX[2] = x + radius;
+        shapeY[2] = y + radius;
 
-        shapex[3] = x - 1;
-        shapey[3] = y + 1;
+        shapeX[3] = x - radius;
+        shapeY[3] = y + radius;
 
-        double[] doubleShapeX = new double[shapex.length];
-        double[] doubleShapeY = new double[shapey.length];
-
-        for (int i = 0; i < shapex.length; i++) {
-        doubleShapeX[i] = shapex[i];
-        doubleShapeY[i] = shapey[i];
-        }
-
-        entity.setShapeX(doubleShapeX);
-        entity.setShapeY(doubleShapeY);
-
+        entity.setShapeX(shapeX);
+        entity.setShapeY(shapeY);
     }
 }

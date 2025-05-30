@@ -110,27 +110,52 @@ public class AsteroidsGame extends Application {
     }
 
     private void render(GraphicsContext gc) {
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, gameData.getDisplayWidth(), gameData.getDisplayHeight());
+    gc.setFill(Color.BLACK);
+    gc.fillRect(0, 0, gameData.getDisplayWidth(), gameData.getDisplayHeight());
 
-        for (Entity entity : world.getEntities()) {
-            double[] shapex = entity.getShapeX();
-            double[] shapey = entity.getShapeY();
+    for (Entity entity : world.getEntities()) {
+        double[] shapex = entity.getShapeX();
+        double[] shapey = entity.getShapeY();
 
-            if (shapex != null && shapey != null && shapex.length > 0) {
-                if (entity.getClass().getSimpleName().equals("EnemyBullet")) {
+        if (shapex != null && shapey != null && shapex.length > 0) {
+            String className = entity.getClass().getSimpleName();
+
+            switch (className) {
+                case "EnemyBullet":
                     gc.setStroke(Color.RED);
-                } else {
+                    gc.setLineWidth(2.5);
+                    break;
+                case "Bullet": // YOUR bullet
+                    gc.setStroke(Color.CYAN);  // your custom color
+                    gc.setLineWidth(2.5);
+                    break;
+                case "Asteroid":
+                    gc.setStroke(Color.GRAY);
+                    gc.setLineWidth(1.0);
+                    break;
+                case "Player":
+                    gc.setStroke(Color.LIMEGREEN);
+                    gc.setLineWidth(2.5);
+                    break;
+                case "Enemy":
+                    gc.setStroke(Color.ORANGERED);
+                    gc.setLineWidth(2.0);
+                    break;
+                default:
                     gc.setStroke(Color.WHITE);
-                }
-                gc.strokePolygon(shapex, shapey, shapex.length);
+                    gc.setLineWidth(1.0);
+                    break;
             }
-        }
 
-        gc.setFill(Color.WHITE);
-        gc.setFont(new Font("Consolas", 20));
-        gc.fillText("Score: " + gameData.getScore(), 10, 25);
+            gc.strokePolygon(shapex, shapey, shapex.length);
+        }
     }
+
+    gc.setFill(Color.WHITE);
+    gc.setFont(new Font("Consolas", 20));
+    gc.fillText("Score: " + gameData.getScore(), 10, 25);
+}
+
 
     private void renderGameOver(GraphicsContext gc) {
         gc.setFill(Color.BLACK);
