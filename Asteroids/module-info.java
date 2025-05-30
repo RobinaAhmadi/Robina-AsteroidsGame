@@ -1,6 +1,7 @@
 module Asteroids {
     requires Common;
-
+    
+    exports dk.sdu.mmmi.cbse.asteroidsystem;
     uses dk.sdu.mmmi.cbse.common.services.IGamePluginService;
     uses dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 

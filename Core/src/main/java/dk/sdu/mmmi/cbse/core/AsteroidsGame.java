@@ -5,8 +5,16 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+
 import dk.sdu.mmmi.cbse.playersystem.PlayerControlSystem;
 import dk.sdu.mmmi.cbse.playersystem.PlayerPlugin;
+import dk.sdu.mmmi.cbse.bulletsystem.BulletPlugin;
+import dk.sdu.mmmi.cbse.bulletsystem.BulletControlSystem;
+import dk.sdu.mmmi.cbse.asteroidssystem.AsteroidPlugin;
+import dk.sdu.mmmi.cbse.asteroidssystem.AsteroidControlSystem;
+import dk.sdu.mmmi.cbse.collisionsystem.CollisionSystem;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -15,13 +23,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import dk.sdu.mmmi.cbse.bulletsystem.BulletPlugin;
-import dk.sdu.mmmi.cbse.bulletsystem.BulletControlSystem;
-
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ServiceLoader;
 
 public class AsteroidsGame extends Application {
 
@@ -30,6 +34,7 @@ public class AsteroidsGame extends Application {
 
     private final List<IGamePluginService> gamePluginList = new ArrayList<>();
     private final List<IEntityProcessingService> entityProcessorList = new ArrayList<>();
+    private final List<IPostEntityProcessingService> postEntityProcessors = new ArrayList<>();
 
     @Override
     public void start(Stage stage) {
@@ -48,13 +53,16 @@ public class AsteroidsGame extends Application {
         scene.setOnKeyPressed(e -> gameData.addKey(e.getCode().toString()));
         scene.setOnKeyReleased(e -> gameData.removeKey(e.getCode().toString()));
 
-
-        // Load plugins and systems manually or via ServiceLoader
+        // Register plugins and processors
         gamePluginList.add(new PlayerPlugin());
         gamePluginList.add(new BulletPlugin());
-        
+        gamePluginList.add(new AsteroidPlugin());
+
         entityProcessorList.add(new PlayerControlSystem());
         entityProcessorList.add(new BulletControlSystem());
+        entityProcessorList.add(new AsteroidControlSystem());
+
+        postEntityProcessors.add(new CollisionSystem());
 
         for (IGamePluginService plugin : gamePluginList) {
             plugin.start(gameData, world);
@@ -72,9 +80,14 @@ public class AsteroidsGame extends Application {
 
                 gameData.setDelta(delta);
 
-                // Update
+                // 💡 FIXED: Process entity logic
                 for (IEntityProcessingService processor : entityProcessorList) {
                     processor.process(gameData, world);
+                }
+
+                // 💡 Handle post-processing (e.g., collision detection)
+                for (IPostEntityProcessingService postProcessor : postEntityProcessors) {
+                    postProcessor.process(gameData, world);
                 }
 
                 // Render

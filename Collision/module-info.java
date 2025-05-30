@@ -1,7 +1,10 @@
 module Collision {
     requires Common;
+    requires Bullet;
+    requires Asteroids;
 
-    uses dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+    exports dk.sdu.mmmi.cbse.collisionsystem;
 
-    provides dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService with dk.sdu.mmmi.cbse.collision.CollisionControlSystem;
+    provides dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService
+        with dk.sdu.mmmi.cbse.collisionsystem.CollisionSystem;
 }

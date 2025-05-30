@@ -14,9 +14,24 @@
     <artifactId>Collision</artifactId>
 
     <dependencies>
+        <!-- Common is already correct -->
         <dependency>
             <groupId>dk.sdu.mmmi.cbse</groupId>
             <artifactId>Common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- ADD Bullet -->
+        <dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>Bullet</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- ADD Asteroids -->
+        <dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>Asteroids</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

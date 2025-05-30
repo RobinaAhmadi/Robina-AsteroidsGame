@@ -47,10 +47,25 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 world.addEntity(bullet);
             }
 
-            // Movement
+            // Apply movement
             x += dx * gameData.getDelta();
             y += dy * gameData.getDelta();
 
+            // Bounce off screen edges
+            int screenWidth = gameData.getDisplayWidth();
+            int screenHeight = gameData.getDisplayHeight();
+
+            if (x < 0 || x > screenWidth) {
+                dx *= -1;
+                x = Math.max(0, Math.min(x, screenWidth));
+            }
+
+            if (y < 0 || y > screenHeight) {
+                dy *= -1;
+                y = Math.max(0, Math.min(y, screenHeight));
+            }
+
+            // Apply friction
             dx *= 1 - deceleration * gameData.getDelta();
             dy *= 1 - deceleration * gameData.getDelta();
 
