@@ -1,7 +1,11 @@
 module Core {
     requires Common;
+    requires Player;
+    requires Bullet;
+    requires Asteroids;
     requires Collision;
+    requires Enemy;
+    requires javafx.controls;
 
-
-    exports dk.sdu.mmmi.cbse.core;
+    opens dk.sdu.mmmi.cbse.core to javafx.graphics;
 }

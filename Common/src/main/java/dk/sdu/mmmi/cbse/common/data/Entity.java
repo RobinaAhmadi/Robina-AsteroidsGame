@@ -1,5 +1,7 @@
 package dk.sdu.mmmi.cbse.common.data;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class Entity {
@@ -14,6 +16,16 @@ public class Entity {
 
     private double[] shapeX;
     private double[] shapeY;
+
+    private final Map<Class<?>, Object> parts = new HashMap<>();
+
+    public void add(Object part) {
+        parts.put(part.getClass(), part);
+    }
+
+    public <T> T getPart(Class<T> partClass) {
+        return partClass.cast(parts.get(partClass));
+    }
 
     public UUID getID() {
         return id;

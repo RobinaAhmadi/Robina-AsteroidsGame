@@ -14,6 +14,8 @@ import dk.sdu.mmmi.cbse.bulletsystem.BulletControlSystem;
 import dk.sdu.mmmi.cbse.asteroidssystem.AsteroidPlugin;
 import dk.sdu.mmmi.cbse.asteroidssystem.AsteroidControlSystem;
 import dk.sdu.mmmi.cbse.collisionsystem.CollisionSystem;
+import dk.sdu.mmmi.cbse.enemysystem.EnemyPlugin;
+import dk.sdu.mmmi.cbse.enemysystem.EnemyControlSystem;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -55,15 +57,19 @@ public class AsteroidsGame extends Application {
         scene.setOnKeyPressed(e -> gameData.addKey(e.getCode().toString()));
         scene.setOnKeyReleased(e -> gameData.removeKey(e.getCode().toString()));
 
-        // Register plugins and processors
+        // Register plugins
         gamePluginList.add(new PlayerPlugin());
         gamePluginList.add(new BulletPlugin());
         gamePluginList.add(new AsteroidPlugin());
+        gamePluginList.add(new EnemyPlugin());
 
+        // Register processing systems
         entityProcessorList.add(new PlayerControlSystem());
         entityProcessorList.add(new BulletControlSystem());
         entityProcessorList.add(new AsteroidControlSystem());
+        entityProcessorList.add(new EnemyControlSystem());
 
+        // Register post-processors
         postEntityProcessors.add(new CollisionSystem());
 
         for (IGamePluginService plugin : gamePluginList) {
