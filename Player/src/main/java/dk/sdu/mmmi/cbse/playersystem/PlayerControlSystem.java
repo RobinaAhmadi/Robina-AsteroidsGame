@@ -9,11 +9,14 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
 public class PlayerControlSystem implements IEntityProcessingService {
 
+    private float shootCooldown = 0f;
+    private static final float SHOOT_INTERVAL = 0.25f; // fire rate control (250ms)
+
     @Override
     public void process(GameData gameData, World world) {
         for (Entity player : world.getEntities(Player.class)) {
             double rotationSpeed = 3;
-            double acceleration = 950; // Increased from 200 to 400
+            double acceleration = 950;
             double deceleration = 10;
 
             double x = player.getX();
@@ -22,21 +25,21 @@ public class PlayerControlSystem implements IEntityProcessingService {
             double dy = player.getDy();
             double radians = player.getRadians();
 
+            // Movement controls
             if (gameData.isDown(GameKeys.LEFT)) {
                 radians += rotationSpeed * gameData.getDelta();
             }
-
             if (gameData.isDown(GameKeys.RIGHT)) {
                 radians -= rotationSpeed * gameData.getDelta();
             }
-
             if (gameData.isDown(GameKeys.UP)) {
                 dx += Math.cos(radians) * acceleration * gameData.getDelta();
                 dy += Math.sin(radians) * acceleration * gameData.getDelta();
             }
 
-            // Fire bullet
-            if (gameData.isDown(GameKeys.SPACE)) {
+            // FIRE BULLET (with cooldown)
+            shootCooldown -= gameData.getDelta();
+            if (gameData.isDown(GameKeys.SPACE) && shootCooldown <= 0) {
                 Bullet bullet = new Bullet();
                 bullet.setX(x);
                 bullet.setY(y);
@@ -44,22 +47,25 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 bullet.setDx(Math.cos(radians) * 300);
                 bullet.setDy(Math.sin(radians) * 300);
                 bullet.setLifeTime(2);
+                bullet.setRadius(2); // same as enemy
                 world.addEntity(bullet);
+                shootCooldown = SHOOT_INTERVAL;
             }
 
-            // Movement
+            // Movement update
             x += dx * gameData.getDelta();
             y += dy * gameData.getDelta();
 
             dx *= 1 - deceleration * gameData.getDelta();
             dy *= 1 - deceleration * gameData.getDelta();
 
-            // Bounce logic
+            // Wall bounce
             if (x < 0) x = 0;
             if (x > gameData.getDisplayWidth()) x = gameData.getDisplayWidth();
             if (y < 0) y = 0;
             if (y > gameData.getDisplayHeight()) y = gameData.getDisplayHeight();
 
+            // Save updates
             player.setX(x);
             player.setY(y);
             player.setDx(dx);
