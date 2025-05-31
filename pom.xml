@@ -1,6 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dk.sdu.mmmi.cbse</groupId>
@@ -9,13 +11,40 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>Core</module>
         <module>Common</module>
-        <module>Player</module>
-        <module>Enemy</module>
         <module>Bullet</module>
+        <module>Player</module>
         <module>Asteroids</module>
-        <module>Collision</module>
+        <module>Enemy</module>
         <module>EnemyBullet</module>
+        <module>Collision</module>
+        <module>Core</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>dk.sdu.mmmi.cbse.core.AsteroidsGame</mainClass>
+                    <classpathScope>runtime</classpathScope>
+                    <includeProjectDependencies>true</includeProjectDependencies>
+                    <includePluginDependencies>false</includePluginDependencies>
+                    <classpath>
+                        <classpathElement>${project.basedir}/Core/target/classes</classpathElement>
+                    </classpath>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

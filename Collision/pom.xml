@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,14 +14,12 @@
     <artifactId>Collision</artifactId>
 
     <dependencies>
-        <!-- Common is already correct -->
         <dependency>
             <groupId>dk.sdu.mmmi.cbse</groupId>
             <artifactId>Common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-        <!-- ADD Bullet -->
         <dependency>
             <groupId>dk.sdu.mmmi.cbse</groupId>
             <artifactId>Bullet</artifactId>
@@ -29,23 +27,49 @@
         </dependency>
 
         <dependency>
-    <groupId>dk.sdu.mmmi.cbse</groupId>
-    <artifactId>Enemy</artifactId>
-    <version>1.0-SNAPSHOT</version>
-</dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>Enemy</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
-<dependency>
-    <groupId>dk.sdu.mmmi.cbse</groupId>
-    <artifactId>EnemyBullet</artifactId>
-    <version>1.0-SNAPSHOT</version>
-</dependency>
+        <dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>EnemyBullet</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
-
-        <!-- ADD Asteroids -->
         <dependency>
             <groupId>dk.sdu.mmmi.cbse</groupId>
             <artifactId>Asteroids</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!-- ✅ JUnit 5 for testing -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>META-INF/services/**</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <!-- ✅ JUnit 5 compatible Surefire plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>

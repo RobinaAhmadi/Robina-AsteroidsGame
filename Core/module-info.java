@@ -1,12 +1,7 @@
 module Core {
-    requires Common;         // Shared base entities and services
-    requires Player;         // Player logic
-    requires Bullet;         // Bullet behavior
-    requires Asteroids;      // Asteroid behavior
-    requires Collision;      // Collision detection
-    requires Enemy;          // Enemies
-    requires EnemyBullet;    // Bullets fired by enemies
-    requires javafx.controls; // JavaFX UI
+    requires Common;
 
-    opens dk.sdu.mmmi.cbse.core to javafx.graphics; // Allows JavaFX to access main class
+    uses dk.sdu.mmmi.cbse.common.services.IGamePluginService;
+    uses dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+    uses dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 }
