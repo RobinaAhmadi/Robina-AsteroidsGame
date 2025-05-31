@@ -7,8 +7,12 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.mmmi.cbse.enemybulletsystem.EnemyBullet;
+import dk.sdu.mmmi.cbse.common.data.ScoreClient;
+
 
 public class CollisionSystem implements IPostEntityProcessingService {
+
+    private final ScoreClient scoreClient = new ScoreClient(); 
 
     @Override
     public void process(GameData gameData, World world) {
@@ -19,6 +23,7 @@ public class CollisionSystem implements IPostEntityProcessingService {
                     world.removeEntity(bullet);
                     world.removeEntity(asteroid);
                     gameData.addScore(100);
+                    scoreClient.addScore(100); // Sync to microservice
                     return;
                 }
             }
@@ -31,6 +36,7 @@ public class CollisionSystem implements IPostEntityProcessingService {
                     world.removeEntity(bullet);
                     world.removeEntity(entity);
                     gameData.addScore(200);
+                    scoreClient.addScore(200); // Sync to microservice
                     return;
                 }
             }

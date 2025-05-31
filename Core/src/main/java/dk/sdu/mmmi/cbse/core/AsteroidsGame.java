@@ -3,6 +3,7 @@ package dk.sdu.mmmi.cbse.core;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
+import dk.sdu.mmmi.cbse.common.data.ScoreClient;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.*;
 import javafx.animation.AnimationTimer;
@@ -29,6 +30,7 @@ public class AsteroidsGame extends Application {
     private Collection<IGamePluginService> gamePluginServices;
     private Collection<IEntityProcessingService> entityProcessingServices;
     private Collection<IPostEntityProcessingService> postEntityProcessingServices;
+    private ScoreClient scoreClient;
 
     @Override
     public void start(Stage window) {
@@ -46,7 +48,7 @@ public class AsteroidsGame extends Application {
         scene.setOnKeyReleased((KeyEvent e) -> handleKeyPress(e.getCode(), false));
 
         window.setScene(scene);
-        window.setTitle("Robina's Asteroids (Spring)");
+        window.setTitle("Robina's Asteroids (Spring + MicroService)");
         window.show();
 
         gameData.setDisplayWidth((int) canvas.getWidth());
@@ -54,6 +56,8 @@ public class AsteroidsGame extends Application {
         gameData.resetScore();
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(GameConfig.class);
+        scoreClient = context.getBean(ScoreClient.class); // Initialize ScoreClient via Spring
+
         gamePluginServices = context.getBeansOfType(IGamePluginService.class).values();
         entityProcessingServices = context.getBeansOfType(IEntityProcessingService.class).values();
         postEntityProcessingServices = context.getBeansOfType(IPostEntityProcessingService.class).values();
@@ -154,7 +158,8 @@ public class AsteroidsGame extends Application {
 
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("Consolas", 20));
-        gc.fillText("Score: " + gameData.getScore(), 10, 25);
+        gc.fillText("Score (Local): " + gameData.getScore(), 10, 25);
+        gc.fillText("Score (API): " + scoreClient.getScore(), 10, 50);
     }
 
     private void renderGameOver(GraphicsContext gc, Stage stage) {
@@ -174,6 +179,7 @@ public class AsteroidsGame extends Application {
             retryButton.setLayoutX(360);
             retryButton.setLayoutY(400);
             retryButton.setOnAction(e -> {
+                scoreClient.resetScore();
                 stage.close();
                 Platform.runLater(() -> {
                     try {

@@ -10,8 +10,8 @@ import dk.sdu.mmmi.cbse.enemysystem.EnemyPlugin;
 import dk.sdu.mmmi.cbse.enemybulletsystem.EnemyBulletControlSystem;
 import dk.sdu.mmmi.cbse.playersystem.PlayerControlSystem;
 import dk.sdu.mmmi.cbse.playersystem.PlayerPlugin;
+import dk.sdu.mmmi.cbse.common.data.ScoreClient;
 import dk.sdu.mmmi.cbse.common.services.*;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -66,5 +66,10 @@ public class GameConfig {
     @Bean
     public IPostEntityProcessingService collisionSystem() {
         return new CollisionSystem();
+    }
+
+    @Bean
+    public ScoreClient scoreClient() {
+        return new ScoreClient();
     }
 }
