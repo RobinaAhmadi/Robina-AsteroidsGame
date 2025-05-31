@@ -64,7 +64,7 @@
         </resources>
 
         <plugins>
-            <!-- ✅ JUnit 5 compatible Surefire plugin -->
+            <!-- ✅ Enable JUnit 5 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

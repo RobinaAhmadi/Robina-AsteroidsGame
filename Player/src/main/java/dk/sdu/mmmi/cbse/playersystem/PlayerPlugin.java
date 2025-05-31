@@ -16,10 +16,10 @@ public class PlayerPlugin implements IGamePluginService {
     }
 
     private Entity createPlayerShip(GameData gameData) {
-        Entity player = new Player(); // This will now work
-        player.setX(gameData.getDisplayWidth() / 2.0);
-        player.setY(gameData.getDisplayHeight() / 2.0);
-        player.setRadians(Math.PI / 2); // You fixed this previously
+        Entity player = new Player();
+        player.setX((float)(gameData.getDisplayWidth() / 2.0));
+        player.setY((float)(gameData.getDisplayHeight() / 2.0));
+        player.setRadians((float)(Math.PI / 2));
         return player;
     }
 

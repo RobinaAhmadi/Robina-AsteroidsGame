@@ -7,6 +7,11 @@ public class Asteroid extends Entity {
 
     private Size size;
 
+    // ✅ Default constructor for testing or frameworks
+    public Asteroid() {
+        this(Size.LARGE);
+    }
+
     public Asteroid(Size size) {
         this.size = size;
         setRadius(size == Size.LARGE ? 30 : size == Size.MEDIUM ? 20 : 10);
