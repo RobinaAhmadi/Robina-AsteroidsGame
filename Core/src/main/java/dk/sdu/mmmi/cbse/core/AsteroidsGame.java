@@ -1,10 +1,6 @@
 package dk.sdu.mmmi.cbse.core;
 
-import dk.sdu.mmmi.cbse.common.data.Entity;
-import dk.sdu.mmmi.cbse.common.data.GameData;
-import dk.sdu.mmmi.cbse.common.data.GameKeys;
-import dk.sdu.mmmi.cbse.common.data.ScoreClient;
-import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.*;
 import dk.sdu.mmmi.cbse.common.services.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -16,6 +12,9 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -31,6 +30,9 @@ public class AsteroidsGame extends Application {
     private Collection<IEntityProcessingService> entityProcessingServices;
     private Collection<IPostEntityProcessingService> postEntityProcessingServices;
     private ScoreClient scoreClient;
+
+    private static MediaPlayer backgroundPlayer;
+    private AudioClip fireSound;
 
     @Override
     public void start(Stage window) {
@@ -48,7 +50,7 @@ public class AsteroidsGame extends Application {
         scene.setOnKeyReleased((KeyEvent e) -> handleKeyPress(e.getCode(), false));
 
         window.setScene(scene);
-        window.setTitle("Robina's Asteroids (Spring + MicroService)");
+        window.setTitle("Robina's Asteroids Game");
         window.show();
 
         gameData.setDisplayWidth((int) canvas.getWidth());
@@ -56,7 +58,7 @@ public class AsteroidsGame extends Application {
         gameData.resetScore();
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(GameConfig.class);
-        scoreClient = context.getBean(ScoreClient.class); // Initialize ScoreClient via Spring
+        scoreClient = context.getBean(ScoreClient.class);
 
         gamePluginServices = context.getBeansOfType(IGamePluginService.class).values();
         entityProcessingServices = context.getBeansOfType(IEntityProcessingService.class).values();
@@ -65,6 +67,9 @@ public class AsteroidsGame extends Application {
         for (IGamePluginService plugin : gamePluginServices) {
             plugin.start(gameData, world);
         }
+
+        loadSounds();
+        playBackgroundMusic();
 
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = 0;
@@ -76,8 +81,9 @@ public class AsteroidsGame extends Application {
                 gameData.setDelta(delta);
 
                 if (gameData.isGameOver()) {
+                    stop(); // stop timer
+                    stopMusic();
                     renderGameOver(gc, window);
-                    stop();
                     return;
                 }
 
@@ -102,7 +108,10 @@ public class AsteroidsGame extends Application {
             case RIGHT -> updateKey(GameKeys.RIGHT, pressed);
             case UP -> updateKey(GameKeys.UP, pressed);
             case DOWN -> updateKey(GameKeys.DOWN, pressed);
-            case SPACE -> updateKey(GameKeys.SPACE, pressed);
+            case SPACE -> {
+                updateKey(GameKeys.SPACE, pressed);
+                if (pressed && fireSound != null) fireSound.play();
+            }
         }
     }
 
@@ -180,6 +189,7 @@ public class AsteroidsGame extends Application {
             retryButton.setLayoutY(400);
             retryButton.setOnAction(e -> {
                 scoreClient.resetScore();
+                stopMusic(); // stop music on restart
                 stage.close();
                 Platform.runLater(() -> {
                     try {
@@ -195,6 +205,33 @@ public class AsteroidsGame extends Application {
                 root.getChildren().add(retryButton);
             }
         });
+    }
+
+    private void loadSounds() {
+        try {
+            String bgPath = getClass().getResource("/sounds/background.mp3").toExternalForm();
+            backgroundPlayer = new MediaPlayer(new Media(bgPath));
+            backgroundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+
+            String firePath = getClass().getResource("/sounds/shoot.mp3").toExternalForm();
+            fireSound = new AudioClip(firePath);
+        } catch (Exception e) {
+            System.out.println("[Sound] Failed to load audio files.");
+            e.printStackTrace();
+        }
+    }
+
+    private void playBackgroundMusic() {
+        if (backgroundPlayer != null) {
+            backgroundPlayer.setVolume(0.4);
+            backgroundPlayer.play();
+        }
+    }
+
+    private void stopMusic() {
+        if (backgroundPlayer != null) {
+            backgroundPlayer.stop();
+        }
     }
 
     public static void main(String[] args) {
