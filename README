@@ -1,0 +1,31 @@
+# Asteroids Game – Component-Based Modular Game
+
+### Author: Robina Ahmadi
+
+---
+## How to run tests 
+
+```bash
+From the root 
+mvn -pl Player test
+mvn -pl Collision test
+
+--- 
+
+## How to Run the Game
+
+```bash
+cd Robina-AsteroidsGame/Robina-AsteroidsGame
+mvn clean install
+mvn -pl Core javafx:run
+
+--- 
+
+## How to Run the Microservice
+
+```bash
+cd AsteroidsGame
+mvn spring-boot:run
+
+Access the service via:
+http://localhost:8080
